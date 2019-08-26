@@ -100,6 +100,9 @@ int sunxi_name_to_gpio(const char *name)
 	int groupsize = 9 * 32;
 	long pin = 0;
 
+	if (*name == 0)
+		return -1;
+
 	if (*name == 'P' || *name == 'p')
 		name++;
 	if (*name >= 'A') {
