@@ -614,6 +614,8 @@ dtb-$(CONFIG_MACH_SUN9I) += \
 	sun9i-a80-optimus.dtb \
 	sun9i-a80-cubieboard4.dtb \
 	sun9i-a80-cx-a99.dtb
+dtb-$(CONFIG_MACH_SUNIV) += \
+	suniv-f1c100s-lotlab-act-monitor.dtb
 
 dtb-$(CONFIG_VF610) += vf500-colibri.dtb \
 	vf610-colibri.dtb \
