@@ -142,12 +142,12 @@
 #define CONFIG_SYS_MMC_MAX_DEVICE	4
 #endif
 
-#ifndef CONFIG_MACH_SUN8I_V3S
-/* 64MB of malloc() pool */
-#define CONFIG_SYS_MALLOC_LEN		(CONFIG_ENV_SIZE + (64 << 20))
-#else
+#if defined(CONFIG_MACH_SUN8I_V3S) || defined(CONFIG_MACH_SUN8I_S3)
 /* 2MB of malloc() pool */
 #define CONFIG_SYS_MALLOC_LEN		(CONFIG_ENV_SIZE + (2 << 20))
+#else
+/* 64MB of malloc() pool */
+#define CONFIG_SYS_MALLOC_LEN		(CONFIG_ENV_SIZE + (64 << 20))
 #endif
 
 /*
@@ -295,19 +295,8 @@ extern int soft_i2c_gpio_scl;
 #define RAMDISK_ADDR_R	__stringify(SDRAM_OFFSET(FE00000))
 
 #else
-/*
- * 160M RAM (256M minimum minus 64MB heap + 32MB for u-boot, stack, fb, etc.
- * 32M uncompressed kernel, 16M compressed kernel, 1M fdt,
- * 1M script, 1M pxe and the ramdisk at the end.
- */
-#ifndef CONFIG_MACH_SUN8I_V3S
-#define BOOTM_SIZE     __stringify(0xa000000)
-#define KERNEL_ADDR_R  __stringify(SDRAM_OFFSET(2000000))
-#define FDT_ADDR_R     __stringify(SDRAM_OFFSET(3000000))
-#define SCRIPT_ADDR_R  __stringify(SDRAM_OFFSET(3100000))
-#define PXEFILE_ADDR_R __stringify(SDRAM_OFFSET(3200000))
-#define RAMDISK_ADDR_R __stringify(SDRAM_OFFSET(3300000))
-#else
+
+#if defined(CONFIG_MACH_SUN8I_V3S) || defined(CONFIG_MACH_SUN8I_S3)
 /*
  * 64M RAM minus 2MB heap + 16MB for u-boot, stack, fb, etc.
  * 16M uncompressed kernel, 8M compressed kernel, 1M fdt,
@@ -319,6 +308,18 @@ extern int soft_i2c_gpio_scl;
 #define SCRIPT_ADDR_R  __stringify(SDRAM_OFFSET(1900000))
 #define PXEFILE_ADDR_R __stringify(SDRAM_OFFSET(1A00000))
 #define RAMDISK_ADDR_R __stringify(SDRAM_OFFSET(1B00000))
+#else
+/*
+ * 160M RAM (256M minimum minus 64MB heap + 32MB for u-boot, stack, fb, etc.
+ * 32M uncompressed kernel, 16M compressed kernel, 1M fdt,
+ * 1M script, 1M pxe and the ramdisk at the end.
+ */
+#define BOOTM_SIZE     __stringify(0xa000000)
+#define KERNEL_ADDR_R  __stringify(SDRAM_OFFSET(2000000))
+#define FDT_ADDR_R     __stringify(SDRAM_OFFSET(3000000))
+#define SCRIPT_ADDR_R  __stringify(SDRAM_OFFSET(3100000))
+#define PXEFILE_ADDR_R __stringify(SDRAM_OFFSET(3200000))
+#define RAMDISK_ADDR_R __stringify(SDRAM_OFFSET(3300000))
 #endif
 #endif
 
@@ -457,11 +458,18 @@ extern int soft_i2c_gpio_scl;
 #define SUNXI_MTDPARTS_DEFAULT
 #endif
 
+#if defined(CONFIG_MACH_SUN8I_V3S) || defined(CONFIG_MACH_SUN8I_S3)
+#define PARTS_DEFAULT \
+	"name=loader,start=8k,size=1024k;" \
+	"name=esp,size=16M,bootable,uuid=${uuid_gpt_esp};" \
+	"name=system,size=-,uuid=${uuid_gpt_system};"
+#else
 #define PARTS_DEFAULT \
 	"name=loader1,start=8k,size=32k,uuid=${uuid_gpt_loader1};" \
 	"name=loader2,size=984k,uuid=${uuid_gpt_loader2};" \
 	"name=esp,size=128M,bootable,uuid=${uuid_gpt_esp};" \
 	"name=system,size=-,uuid=${uuid_gpt_system};"
+#endif
 
 #define UUID_GPT_ESP "c12a7328-f81f-11d2-ba4b-00a0c93ec93b"
 
