@@ -422,6 +422,14 @@ extern int soft_i2c_gpio_scl;
 
 #include <config_distro_bootcmd.h>
 
+#ifdef CONFIG_CMD_FASTBOOT
+#define FASTBOOT_SETTINGS \
+	"boot_targets=fel mmc_auto usb0 fastboot\0" \
+	"bootcmd_fastboot=fastboot usb 0\0" 
+#else
+#define FASTBOOT_SETTINGS
+#endif
+
 #ifdef CONFIG_USB_KEYBOARD
 #define CONSOLE_STDIN_SETTINGS \
 	"stdin=serial,usbkbd\0"
@@ -515,7 +523,8 @@ extern int soft_i2c_gpio_scl;
 	"uuid_gpt_system=" UUID_GPT_SYSTEM "\0" \
 	"partitions=" PARTS_DEFAULT "\0" \
 	BOOTCMD_SUNXI_COMPAT \
-	BOOTENV
+	BOOTENV \
+	FASTBOOT_SETTINGS
 
 #else /* ifndef CONFIG_SPL_BUILD */
 #define CONFIG_EXTRA_ENV_SETTINGS
