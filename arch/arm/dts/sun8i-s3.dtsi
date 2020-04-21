@@ -146,3 +146,12 @@
         };
     };
 };
+
+&usb_otg {
+    phys = <&usbphy>;
+    extcon = <&usbphy>;
+};
+
+&usbphy {
+    #phy-cells = <0>;
+};
