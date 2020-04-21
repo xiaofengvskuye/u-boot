@@ -26,12 +26,21 @@
 
 DECLARE_GLOBAL_DATA_PTR;
 
+#if defined(CONFIG_MACH_SUN8I_V3S) || defined(CONFIG_MACH_SUN8I_S3)
+enum {
+	/* Maximum LCD size we support */
+	LCD_MAX_WIDTH		= 1024,
+	LCD_MAX_HEIGHT		= 768,
+	LCD_MAX_LOG2_BPP	= VIDEO_BPP32,
+};
+#else
 enum {
 	/* Maximum LCD size we support */
 	LCD_MAX_WIDTH		= 3840,
 	LCD_MAX_HEIGHT		= 2160,
 	LCD_MAX_LOG2_BPP	= VIDEO_BPP32,
 };
+#endif
 
 static void sunxi_de2_composer_init(void)
 {
@@ -46,13 +55,19 @@ static void sunxi_de2_composer_init(void)
 	reg_value &= ~(0x01 << 24);
 	writel(reg_value, SUNXI_SRAMC_BASE + 0x04);
 #endif
-
+#if defined(CONFIG_MACH_SUN8I_V3S) || defined(CONFIG_MACH_SUN8I_S3)
+	unsigned int hz = 300000000;
+	int pll = clock_get_pll6() * 2;
+	int div = 1;
+	while ((pll / div) > hz)
+		div++;
+	writel(CCM_DE2_CTRL_GATE | CCM_DE2_CTRL_PLL6_2X | CCM_DE2_CTRL_M(div), &ccm->de_clk_cfg);
+#else
 	clock_set_pll10(432000000);
-
 	/* Set DE parent to pll10 */
 	clrsetbits_le32(&ccm->de_clk_cfg, CCM_DE2_CTRL_PLL_MASK,
 			CCM_DE2_CTRL_PLL10);
-
+#endif
 	/* Set ahb gating to pass */
 	setbits_le32(&ccm->ahb_reset1_cfg, 1 << AHB_RESET_OFFSET_DE);
 	setbits_le32(&ccm->ahb_gate1, 1 << AHB_GATE_OFFSET_DE);
@@ -77,14 +92,13 @@ static void sunxi_de2_mode_set(int mux, const struct display_timing *mode,
 	struct de_ui * const de_ui_regs =
 		(struct de_ui *)(de_mux_base +
 				 SUNXI_DE2_MUX_CHAN_REGS +
-				 SUNXI_DE2_MUX_CHAN_SZ * 1);
+				 SUNXI_DE2_MUX_CHAN_SZ * SUNXI_DE2_MUX_CHAN_SZ_COUNT);
 	struct de_csc * const de_csc_regs =
 		(struct de_csc *)(de_mux_base +
 				  SUNXI_DE2_MUX_DCSC_REGS);
 	u32 size = SUNXI_DE2_WH(mode->hactive.typ, mode->vactive.typ);
 	int channel;
 	u32 format;
-
 	/* enable clock */
 #ifdef CONFIG_MACH_SUN8I_H3
 	setbits_le32(&de_clk_regs->rst_cfg, (mux == 0) ? 1 : 4);
@@ -111,13 +125,12 @@ static void sunxi_de2_mode_set(int mux, const struct display_timing *mode,
 
 	writel(0x00000101, &de_bld_regs->fcolor_ctl);
 
-	writel(1, &de_bld_regs->route);
+	writel(SUNXI_DE2_BLD_ROUTE, &de_bld_regs->route);
 
 	writel(0, &de_bld_regs->premultiply);
 	writel(0xff000000, &de_bld_regs->bkcolor);
 
 	writel(0x03010301, &de_bld_regs->bld_mode[0]);
-
 	writel(size, &de_bld_regs->output_size);
 	writel(mode->flags & DISPLAY_FLAGS_INTERLACED ? 2 : 0,
 	       &de_bld_regs->out_ctl);
