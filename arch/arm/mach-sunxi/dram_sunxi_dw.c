@@ -896,6 +896,9 @@ unsigned long sunxi_dram_init(void)
 	uint16_t socid = SOCID_R40;
 #elif defined(CONFIG_MACH_SUN8I_V3S)
 	uint16_t socid = SOCID_V3S;
+#elif defined(CONFIG_MACH_SUN8I_S3)
+	/* TODO: set delays and mbus priority for S3 */
+	uint16_t socid = SOCID_H3;
 #elif defined(CONFIG_MACH_SUN50I)
 	uint16_t socid = SOCID_A64;
 #elif defined(CONFIG_MACH_SUN50I_H5)
