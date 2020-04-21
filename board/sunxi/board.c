@@ -49,6 +49,7 @@
 #include <sy8106a.h>
 #include <asm/setup.h>
 #include <status_led.h>
+#include <splash.h>
 
 DECLARE_GLOBAL_DATA_PTR;
 
@@ -1055,4 +1056,42 @@ int board_fit_config_name_match(const char *name)
 
 	return ret;
 }
+#endif
+
+#ifdef CONFIG_SPLASH_SCREEN
+static struct splash_location sunxi_splash_locations[] = {
+	{
+		.name = "mmc0_fs",
+		.storage = SPLASH_STORAGE_MMC,
+		.flags = SPLASH_STORAGE_FS,
+		.devpart = "0:1",
+	},
+	{
+		.name = "mmc1_fs",
+		.storage = SPLASH_STORAGE_MMC,
+		.flags = SPLASH_STORAGE_FS,
+		.devpart = "1:1",
+	},
+};
+
+int splash_screen_prepare(void)
+{
+	return splash_source_load(sunxi_splash_locations,
+				  ARRAY_SIZE(sunxi_splash_locations));
+}
+
+int initr_env_dynamic_default(void)
+{
+	uint boot = sunxi_get_boot_device();
+	switch (boot) {
+		case BOOT_DEVICE_MMC1:
+			env_set("splashsource", "mmc0_fs");
+			break;
+		case BOOT_DEVICE_MMC2:
+			env_set("splashsource", "mmc1_fs");
+			break;
+	}
+	return 0;
+}
+
 #endif
