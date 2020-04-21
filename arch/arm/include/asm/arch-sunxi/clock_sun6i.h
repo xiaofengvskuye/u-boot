@@ -333,8 +333,13 @@ struct sunxi_ccm_reg {
 #define AHB_GATE_OFFSET_LCD1		5
 #define AHB_GATE_OFFSET_LCD0		4
 #else
+#if defined(CONFIG_MACH_SUN8I_V3S) || defined(CONFIG_MACH_SUN8I_S3)
+#define AHB_GATE_OFFSET_LCD1		5
+#define AHB_GATE_OFFSET_LCD0		4
+#else
 #define AHB_GATE_OFFSET_LCD1		4
 #define AHB_GATE_OFFSET_LCD0		3
+#endif
 #endif
 
 #define CCM_NAND_CTRL_M(x)		((x) - 1)
@@ -480,8 +485,13 @@ struct sunxi_ccm_reg {
 #define AHB_RESET_OFFSET_LCD1		5
 #define AHB_RESET_OFFSET_LCD0		4
 #else
+#if defined(CONFIG_MACH_SUN8I_V3S) || defined(CONFIG_MACH_SUN8I_S3)
+#define AHB_RESET_OFFSET_LCD1		5
+#define AHB_RESET_OFFSET_LCD0		4
+#else
 #define AHB_RESET_OFFSET_LCD1		4
 #define AHB_RESET_OFFSET_LCD0		3
+#endif
 #endif
 
 /* ahb_reset2 offsets */
@@ -508,7 +518,12 @@ struct sunxi_ccm_reg {
 /* CCM bits common to all Display Engine 2.0 clock ctrl regs */
 #define CCM_DE2_CTRL_M(n)		((((n) - 1) & 0xf) << 0)
 #define CCM_DE2_CTRL_PLL_MASK		(3 << 24)
+
+#if defined(CONFIG_MACH_SUN8I_V3S) || defined(CONFIG_MACH_SUN8I_S3)
+#define CCM_DE2_CTRL_PLL6_2X		(2 << 24)
+#else
 #define CCM_DE2_CTRL_PLL6_2X		(0 << 24)
+#endif
 #define CCM_DE2_CTRL_PLL10		(1 << 24)
 #define CCM_DE2_CTRL_GATE		(0x1 << 31)
 

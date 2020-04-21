@@ -137,4 +137,12 @@ struct de_csc {
 
 #define SUNXI_DE2_WH(w, h)			(((h - 1) << 16) | (w - 1))
 
+#if defined(CONFIG_MACH_SUN8I_V3S) || defined(CONFIG_MACH_SUN8I_S3)
+	#define SUNXI_DE2_MUX_CHAN_SZ_COUNT 2
+	#define SUNXI_DE2_BLD_ROUTE 2
+#else
+	#define SUNXI_DE2_MUX_CHAN_SZ_COUNT 1
+	#define SUNXI_DE2_BLD_ROUTE 1
+#endif
+
 #endif /* _SUNXI_DISPLAY2_H */
