@@ -52,11 +52,11 @@ config CLK_SUN8I_R40
 	  on Allwinner R40 SoC.
 
 config CLK_SUN8I_V3S
-	bool "Clock driver for Allwinner V3S"
-	default MACH_SUN8I_V3S
+	bool "Clock driver for Allwinner V3S/S3"
+	default MACH_SUN8I_V3S || MACH_SUN8I_S3
 	help
 	  This enables common clock driver support for platforms based
-	  on Allwinner V3S SoC.
+	  on Allwinner V3S/S3 SoC.
 
 config CLK_SUN9I_A80
 	bool "Clock driver for Allwinner A80"

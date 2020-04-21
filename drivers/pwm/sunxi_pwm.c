@@ -49,6 +49,9 @@ static int sunxi_pwm_config_pinmux(void)
 #ifdef CONFIG_MACH_SUN50I
 	sunxi_gpio_set_cfgpin(SUNXI_GPD(22), SUNXI_GPD_PWM);
 #endif
+#if defined(CONFIG_MACH_SUN8I_V3S) || defined(CONFIG_MACH_SUN8I_S3)
+	sunxi_gpio_set_cfgpin(SUNXI_GPB(4), SUN4I_GPB_PWM);
+#endif
 	return 0;
 }
 

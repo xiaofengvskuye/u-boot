@@ -504,6 +504,13 @@ static void mmc_pinmux_setup(int sdc)
 		sunxi_gpio_set_pull(SUNXI_GPC(24), SUNXI_GPIO_PULL_UP);
 		sunxi_gpio_set_drv(SUNXI_GPC(24), 2);
 #elif defined(CONFIG_MACH_SUN8I) || defined(CONFIG_MACH_SUN50I)
+#ifdef CONFIG_MACH_SUN8I_S3
+		for (pin = SUNXI_GPC(0); pin <= SUNXI_GPC(10); pin++) {
+			sunxi_gpio_set_cfgpin(pin, 2);
+			sunxi_gpio_set_pull(pin, SUNXI_GPIO_PULL_UP);
+			sunxi_gpio_set_drv(pin, 2);
+		}
+#else
 		/* SDC2: PC5-PC6, PC8-PC16 */
 		for (pin = SUNXI_GPC(5); pin <= SUNXI_GPC(6); pin++) {
 			sunxi_gpio_set_cfgpin(pin, SUNXI_GPC_SDC2);
@@ -516,6 +523,7 @@ static void mmc_pinmux_setup(int sdc)
 			sunxi_gpio_set_pull(pin, SUNXI_GPIO_PULL_UP);
 			sunxi_gpio_set_drv(pin, 2);
 		}
+#endif
 #elif defined(CONFIG_MACH_SUN50I_H6)
 		/* SDC2: PC4-PC14 */
 		for (pin = SUNXI_GPC(4); pin <= SUNXI_GPC(14); pin++) {
