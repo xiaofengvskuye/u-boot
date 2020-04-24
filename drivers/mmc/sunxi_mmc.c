@@ -671,7 +671,7 @@ static int sunxi_mmc_probe(struct udevice *dev)
 	cfg->b_max = CONFIG_SYS_MMC_MAX_BLK_COUNT;
 
 	cfg->f_min = 400000;
-	cfg->f_max = 52000000;
+	cfg->f_max = dev_read_u32_default(dev, "max-speed", 52000000);
 
 	ret = mmc_of_parse(dev, cfg);
 	if (ret)
