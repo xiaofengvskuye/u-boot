@@ -929,6 +929,12 @@ config VIDEO_DE2
 	Say y here if you want to build DE2 video driver which is present on
 	newer SoCs. Currently only HDMI output is supported.
 
+config SPLASH_SOURCE_SF_OFFSET
+	hex "Splash screen offset in SPI-Flash"
+	depends on VIDEO_SUNXI
+	default 0
+	---help---
+	Specific the location of splash screen in SPI-Flash.
 
 choice
 	prompt "LCD panel support"
@@ -1004,7 +1010,7 @@ config SPL_STACK_R_ADDR
 
 config SPL_SPI_SUNXI
 	bool "Support for SPI Flash on Allwinner SoCs in SPL"
-	depends on MACH_SUN4I || MACH_SUN5I || MACH_SUN7I || MACH_SUNXI_H3_H5 || MACH_SUN50I || MACH_SUN8I_R40 || MACH_SUN50I_H6
+	depends on MACH_SUNIV || MACH_SUN4I || MACH_SUN5I || MACH_SUN7I || MACH_SUNXI_H3_H5 || MACH_SUN50I || MACH_SUN8I_R40 || MACH_SUN50I_H6
 	help
 	  Enable support for SPI Flash. This option allows SPL to read from
 	  sunxi SPI Flash. It uses the same method as the boot ROM, so does

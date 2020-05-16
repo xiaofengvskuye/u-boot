@@ -125,7 +125,7 @@ static bool is_sun6i_gen_spi(void)
 
 static uintptr_t spi0_base_address(void)
 {
-	if (IS_ENABLED(CONFIG_MACH_SUN8I_R40))
+	if (IS_ENABLED(CONFIG_MACH_SUN8I_R40) || IS_ENABLED(CONFIG_MACH_SUNIV))
 		return 0x01C05000;
 
 	if (IS_ENABLED(CONFIG_MACH_SUN50I_H6))
@@ -211,7 +211,8 @@ static void spi0_init(void)
 	if (IS_ENABLED(CONFIG_MACH_SUN50I) ||
 	    IS_ENABLED(CONFIG_MACH_SUN50I_H6))
 		pin_function = SUN50I_GPC_SPI0;
-
+	if (IS_ENABLED(CONFIG_MACH_SUNIV))
+		pin_function = SUNIV_GPC_SPI0;
 	spi0_pinmux_setup(pin_function);
 	spi0_enable_clock();
 }
