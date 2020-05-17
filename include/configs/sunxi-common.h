@@ -257,6 +257,8 @@ extern int soft_i2c_gpio_scl;
 #else
 #define OF_STDOUT_PATH		"/soc@01c00000/serial@01c28000:115200"
 #endif
+#elif CONFIG_CONS_INDEX == 2 && defined(CONFIG_MACH_SUNIV)
+#define OF_STDOUT_PATH		"/soc@01c00000/serial@1c25400:115200"
 #elif CONFIG_CONS_INDEX == 2 && defined(CONFIG_MACH_SUN5I)
 #define OF_STDOUT_PATH		"/soc@01c00000/serial@01c28400:115200"
 #elif CONFIG_CONS_INDEX == 3 && defined(CONFIG_MACH_SUN8I)
@@ -273,7 +275,7 @@ extern int soft_i2c_gpio_scl;
  * The amount of RAM to keep free at the top of RAM when relocating u-boot,
  * to use as framebuffer. This must be a multiple of 4096.
  */
-#define CONFIG_SUNXI_MAX_FB_SIZE (16 << 20)
+#define CONFIG_SUNXI_MAX_FB_SIZE (2 << 20)
 
 #define CONFIG_VIDEO_LOGO
 #define CONFIG_VIDEO_STD_TIMINGS
@@ -509,9 +511,20 @@ extern int soft_i2c_gpio_scl;
 #else
 #define FDTFILE CONFIG_DEFAULT_DEVICE_TREE ".dtb"
 #endif
-
+#ifdef CONFIG_VIDEO
+#define CONFIG_VIDEO_BMP_RLE8
+#define CONFIG_BMP_16BPP
+#define CONFIG_BMP_24BPP
+#define CONFIG_BMP_32BPP
+#define CONFIG_SPLASH_SCREEN
+#define CONFIG_SPLASH_SOURCE
+#define SPLASHIMAGE_ENV_SETTINGS "splashimage=" __stringify(SDRAM_OFFSET(0c80000)) "\0"
+#else
+#define SPLASHIMAGE_ENV_SETTINGS
+#endif
 #define CONFIG_EXTRA_ENV_SETTINGS \
 	CONSOLE_ENV_SETTINGS \
+	SPLASHIMAGE_ENV_SETTINGS \
 	MEM_LAYOUT_ENV_SETTINGS \
 	DFU_ALT_INFO_RAM \
 	"fdtfile=" FDTFILE "\0" \
