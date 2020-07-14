@@ -771,6 +771,9 @@ static init_fnc_t init_sequence_r[] = {
 	initr_mmc,
 #endif
 	initr_env,
+#ifdef CONFIG_ENV_DYNAMIC_DEFAULT
+	initr_env_dynamic_default,
+#endif
 #ifdef CONFIG_SYS_BOOTPARAMS_LEN
 	initr_malloc_bootparams,
 #endif

@@ -924,15 +924,28 @@ int board_fit_config_name_match(const char *name)
 #ifdef CONFIG_SPLASH_SCREEN
 static struct splash_location sunxi_splash_locations[] = {
 	{
-		.name = "sf",
-		.storage = SPLASH_STORAGE_SF,
-		.flags = SPLASH_STORAGE_RAW,
-		.offset = CONFIG_SPLASH_SOURCE_SF_OFFSET,
+		.name = "mmc0_fs",
+		.storage = SPLASH_STORAGE_MMC,
+		.flags = SPLASH_STORAGE_FS,
+		.devpart = "0:1",
 	}
 };
 int splash_screen_prepare(void)
 {
 	return splash_source_load(sunxi_splash_locations,
 				  ARRAY_SIZE(sunxi_splash_locations));
+}
+int initr_env_dynamic_default(void)
+{
+	uint boot = sunxi_get_boot_device();
+	switch (boot) {
+		case BOOT_DEVICE_MMC1:
+			env_set("splashsource", "mmc0_fs");
+			break;
+		case BOOT_DEVICE_MMC2:
+			env_set("splashsource", "mmc1_fs");
+			break;
+	}
+	return 0;
 }
 #endif

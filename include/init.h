@@ -214,6 +214,7 @@ int update_flash_size(int flash_size);
 int arch_early_init_r(void);
 void pci_init(void);
 int misc_init_r(void);
+int initr_env_dynamic_default(void);
 #if defined(CONFIG_VID)
 int init_func_vid(void);
 #endif
