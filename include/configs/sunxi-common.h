@@ -67,7 +67,7 @@
 #define SDRAM_OFFSET(x) 0x2##x
 #define CONFIG_SYS_SDRAM_BASE		0x20000000
 #define CONFIG_SYS_LOAD_ADDR		0x22000000 /* default load address */
-/* Note SPL_STACK_R_ADDR is set through Kconfig, we include it here 
+/* Note SPL_STACK_R_ADDR is set through Kconfig, we include it here
  * since it needs to fit in with the other values. By also #defining it
  * we get warnings if the Kconfig value mismatches. */
 #define CONFIG_SPL_STACK_R_ADDR		0x2fe00000
@@ -76,7 +76,7 @@
 #define SDRAM_OFFSET(x) 0x8##x
 #define CONFIG_SYS_SDRAM_BASE		0x80000000
 #define CONFIG_SYS_LOAD_ADDR		0x81000000 /* default load address */
-/* Note SPL_STACK_R_ADDR is set through Kconfig, we include it here 
+/* Note SPL_STACK_R_ADDR is set through Kconfig, we include it here
  * since it needs to fit in with the other values. By also #defining it
  * we get warnings if the Kconfig value mismatches. */
 #define CONFIG_SPL_STACK_R_ADDR		0x81e00000
@@ -86,7 +86,7 @@
 #define CONFIG_SYS_SDRAM_BASE		0x40000000
 #define CONFIG_SYS_LOAD_ADDR		0x42000000 /* default load address */
 /* V3s do not have enough memory to place code at 0x4a000000 */
-/* Note SPL_STACK_R_ADDR is set through Kconfig, we include it here 
+/* Note SPL_STACK_R_ADDR is set through Kconfig, we include it here
  * since it needs to fit in with the other values. By also #defining it
  * we get warnings if the Kconfig value mismatches. */
 #define CONFIG_SPL_STACK_R_ADDR		0x4fe00000
@@ -462,8 +462,8 @@ extern int soft_i2c_gpio_scl;
 
 #ifdef CONFIG_VIDEO
 #define CONSOLE_STDOUT_SETTINGS \
-	"stdout=serial,vga\0" \
-	"stderr=serial,vga\0"
+	"stdout=serial,vidconsole\0" \
+	"stderr=serial,vidconsole\0"
 #elif CONFIG_DM_VIDEO
 #define CONSOLE_STDOUT_SETTINGS \
 	"stdout=serial,vidconsole\0" \
@@ -489,9 +489,8 @@ extern int soft_i2c_gpio_scl;
 #endif
 
 #define PARTS_DEFAULT \
-	"name=loader1,start=8k,size=32k,uuid=${uuid_gpt_loader1};" \
-	"name=loader2,size=984k,uuid=${uuid_gpt_loader2};" \
-	"name=esp,size=128M,bootable,uuid=${uuid_gpt_esp};" \
+	"name=loader,start=8k,size=1024k;" \
+	"name=esp,size=16M,bootable,uuid=${uuid_gpt_esp};" \
 	"name=system,size=-,uuid=${uuid_gpt_system};"
 
 #define UUID_GPT_ESP "c12a7328-f81f-11d2-ba4b-00a0c93ec93b"
@@ -519,6 +518,7 @@ extern int soft_i2c_gpio_scl;
 #define CONFIG_SPLASH_SCREEN
 #define CONFIG_SPLASH_SOURCE
 #define SPLASHIMAGE_ENV_SETTINGS "splashimage=" __stringify(SDRAM_OFFSET(0c80000)) "\0"
+#define CONFIG_ENV_DYNAMIC_DEFAULT
 #else
 #define SPLASHIMAGE_ENV_SETTINGS
 #endif
