@@ -843,6 +843,17 @@ static void setup_environment(const void *fdt)
 	}
 }
 
+static int usb_gadget_init(void)
+{
+	int ret;
+	struct udevice *usb_dev;
+	ret = uclass_first_device(UCLASS_USB_GADGET_GENERIC, &usb_dev);
+	if (!usb_dev || ret) {
+		pr_err("No USB gadget device found\n");
+	}
+	return ret;
+}
+
 int misc_init_r(void)
 {
 	uint boot;
@@ -868,7 +879,9 @@ int misc_init_r(void)
 #ifdef CONFIG_USB_ETHER
 	usb_ether_init();
 #endif
-
+#ifdef CONFIG_USB_GADGET
+	usb_gadget_init();
+#endif
 	return 0;
 }
 

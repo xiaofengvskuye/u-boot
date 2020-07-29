@@ -12,6 +12,7 @@
 #include <linux/bitops.h>
 #include <linux/delay.h>
 #include <linux/libfdt.h>
+#include <asm/arch/spl.h>
 
 #ifdef CONFIG_SPL_OS_BOOT
 #error CONFIG_SPL_OS_BOOT is not supported yet
@@ -89,7 +90,7 @@
 
 #define SPI0_CLK_DIV_BY_2           0x1000
 #define SPI0_CLK_DIV_BY_4           0x1001
-
+#define SPI0_CLK_DIV_BY_32          0x100f
 /*****************************************************************************/
 
 /*
@@ -120,7 +121,8 @@ static void spi0_pinmux_setup(unsigned int pin_function)
 static bool is_sun6i_gen_spi(void)
 {
 	return IS_ENABLED(CONFIG_SUNXI_GEN_SUN6I) ||
-	       IS_ENABLED(CONFIG_MACH_SUN50I_H6);
+	       IS_ENABLED(CONFIG_MACH_SUN50I_H6) ||
+		   IS_ENABLED(CONFIG_MACH_SUNIV);
 }
 
 static uintptr_t spi0_base_address(void)

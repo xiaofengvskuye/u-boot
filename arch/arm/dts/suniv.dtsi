@@ -89,6 +89,18 @@
 			#size-cells = <0>;
 		};
 
+		spi1: spi@1c06000 {
+			compatible = "allwinner,suniv-spi";
+			reg = <0x01c06000 0x1000>;
+			interrupts = <10>;
+			clocks = <&ccu CLK_BUS_SPI1>, <&ccu CLK_BUS_SPI1>;
+			clock-names = "ahb", "mod";
+			resets = <&ccu RST_BUS_SPI1>;
+			status = "disabled";
+			#address-cells = <1>;
+			#size-cells = <0>;
+		};
+
 		ccu: clock@1c20000 {
 			compatible = "allwinner,suniv-f1c100s-ccu";
 			reg = <0x01c20000 0x400>;
@@ -185,7 +197,7 @@
 		};
 
 		usb_otg: usb@1c13000 {
-			compatible = "allwinner,suniv-musb";
+			compatible = "allwinner,sun8i-h3-musb";
 			reg = <0x01c13000 0x0400>;
 			clocks = <&ccu CLK_BUS_OTG>;
 			resets = <&ccu RST_BUS_OTG>;

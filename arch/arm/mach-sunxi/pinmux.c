@@ -8,6 +8,9 @@
 #include <common.h>
 #include <asm/io.h>
 #include <asm/arch/gpio.h>
+#include <fdtdec.h>
+#include <fdt_support.h>
+#include <dt-bindings/pinctrl/sun4i-a10.h>
 
 void sunxi_gpio_set_cfgbank(struct sunxi_gpio *pio, int bank_offset, u32 val)
 {
@@ -67,4 +70,20 @@ int sunxi_gpio_set_pull(u32 pin, u32 val)
 	clrsetbits_le32(&pio->pull[0] + index, 0x3 << offset, val << offset);
 
 	return 0;
+}
+
+int sunxi_gpio_parse_pin_name(const char *pin_name)
+{
+	int pin;
+
+	if (pin_name[0] != 'P')
+		return -1;
+
+	if (pin_name[1] < 'A' || pin_name[1] > 'Z')
+		return -1;
+
+	pin = (pin_name[1] - 'A') << 5;
+	pin += simple_strtol(&pin_name[2], NULL, 10);
+
+	return pin;
 }
