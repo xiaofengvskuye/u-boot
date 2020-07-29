@@ -26,17 +26,36 @@ static struct ccu_clk_gate f1c100s_gates[] = {
 };
 
 static struct ccu_reset f1c100s_resets[] = {
-	[RST_USB_PHY0]		= RESET(0x0cc, BIT(0)),
+	[RST_USB_PHY0]		=  RESET(0x0cc, BIT(0)),
 
-	[RST_BUS_MMC0]		= RESET(0x2c0, BIT(8)),
-	[RST_BUS_MMC1]		= RESET(0x2c0, BIT(9)),
-	[RST_BUS_SPI0]		= RESET(0x2c0, BIT(20)),
-	[RST_BUS_SPI1]		= RESET(0x2c0, BIT(21)),
-	[RST_BUS_OTG]		= RESET(0x2c0, BIT(24)),
+	[RST_BUS_DMA]		=  RESET(0x2c0, BIT(6)),
+	[RST_BUS_MMC0]		=  RESET(0x2c0, BIT(8)),
+	[RST_BUS_MMC1]		=  RESET(0x2c0, BIT(9)),
+	[RST_BUS_DRAM]		=  RESET(0x2c0, BIT(14)),
+	[RST_BUS_SPI0]		=  RESET(0x2c0, BIT(20)),
+	[RST_BUS_SPI1]		=  RESET(0x2c0, BIT(21)),
+	[RST_BUS_OTG]		=  RESET(0x2c0, BIT(24)),
 
-	[RST_BUS_UART0]		= RESET(0x2d0, BIT(20)),
-	[RST_BUS_UART1]		= RESET(0x2d0, BIT(21)),
-	[RST_BUS_UART2]		= RESET(0x2d0, BIT(22)),
+	[RST_BUS_VE]		=  RESET(0x2c4, BIT(0)),
+	[RST_BUS_LCD]		=  RESET(0x2c4, BIT(4)),
+	[RST_BUS_DEINTERLACE]	=  RESET(0x2c4, BIT(5)),
+	[RST_BUS_CSI]		=  RESET(0x2c4, BIT(8)),
+	[RST_BUS_TVD]		=  RESET(0x2c4, BIT(9)),
+	[RST_BUS_TVE]		=  RESET(0x2c4, BIT(10)),
+	[RST_BUS_DE_BE]		=  RESET(0x2c4, BIT(12)),
+	[RST_BUS_DE_FE]		=  RESET(0x2c4, BIT(14)),
+
+	[RST_BUS_CODEC]		=  RESET(0x2d0, BIT(0)),
+	[RST_BUS_SPDIF]		=  RESET(0x2d0, BIT(1)),
+	[RST_BUS_IR]		=  RESET(0x2d0, BIT(2)),
+	[RST_BUS_RSB]		=  RESET(0x2d0, BIT(3)),
+	[RST_BUS_I2S0]		=  RESET(0x2d0, BIT(12)),
+	[RST_BUS_I2C0]		=  RESET(0x2d0, BIT(16)),
+	[RST_BUS_I2C1]		=  RESET(0x2d0, BIT(17)),
+	[RST_BUS_I2C2]		=  RESET(0x2d0, BIT(18)),
+	[RST_BUS_UART0]		=  RESET(0x2d0, BIT(20)),
+	[RST_BUS_UART1]		=  RESET(0x2d0, BIT(21)),
+	[RST_BUS_UART2]		=  RESET(0x2d0, BIT(22)),
 };
 
 static const struct ccu_desc f1c100s_ccu_desc = {

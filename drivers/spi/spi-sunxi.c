@@ -142,6 +142,7 @@ struct sun4i_spi_priv {
 
 	const u8 *tx_buf;
 	u8 *rx_buf;
+	bool always_on;
 };
 
 static inline void sun4i_spi_drain_fifo(struct sun4i_spi_priv *priv, int len)
@@ -248,7 +249,11 @@ static int sun4i_spi_parse_pins(struct udevice *dev)
 					break;
 			}
 
-			pin = name_to_gpio(pin_name);
+#ifndef CONFIG_MACH_SUNIV
+ 			pin = name_to_gpio(pin_name);
+#else
+			pin = sunxi_gpio_parse_pin_name(pin_name);
+#endif
 			if (pin < 0)
 				break;
 
@@ -270,7 +275,7 @@ static inline int sun4i_spi_set_clock(struct udevice *dev, bool enable)
 	struct sun4i_spi_priv *priv = dev_get_priv(dev);
 	int ret;
 
-	if (!enable) {
+	if (!enable && !priv->variant->always_on) {
 		clk_disable(&priv->clk_ahb);
 		clk_disable(&priv->clk_mod);
 		if (reset_valid(&priv->reset))
@@ -521,6 +526,8 @@ static int sun4i_spi_probe(struct udevice *bus)
 	priv->base = plat->base;
 	priv->freq = plat->max_hz;
 
+	if(priv->variant->always_on)
+		sun4i_spi_set_clock(bus, true);
 	return 0;
 }
 
@@ -619,6 +626,15 @@ static const struct sun4i_spi_variant sun8i_h3_spi_variant = {
 	.has_burst_ctl		= true,
 };
 
+static const struct sun4i_spi_variant suniv_spi_variant = {
+	.regs = sun6i_spi_regs,
+	.bits = sun6i_spi_bits,
+	.fifo_depth = 64,
+	.has_soft_reset = true,
+	.has_burst_ctl = true,
+	.always_on = true,
+};
+
 static const struct udevice_id sun4i_spi_ids[] = {
 	{
 	  .compatible = "allwinner,sun4i-a10-spi",
@@ -631,6 +647,10 @@ static const struct udevice_id sun4i_spi_ids[] = {
 	{
 	  .compatible = "allwinner,sun8i-h3-spi",
 	  .data = (ulong)&sun8i_h3_spi_variant,
+	},
+	{
+	  .compatible = "allwinner,suniv-spi",
+	  .data = (ulong)&suniv_spi_variant,
 	},
 	{ /* sentinel */ }
 };
