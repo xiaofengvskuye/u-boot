@@ -289,6 +289,10 @@
 				pins = "PH0", "PH1";
 				function = "uart0";
 			};
+			uart3_pd_pins: uart3-pd-pins {
+				pins = "PD23", "PD24";
+				function = "uart3";
+			};
 		};
 
 		gic: interrupt-controller@3021000 {

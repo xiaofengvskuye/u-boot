@@ -62,7 +62,7 @@
 #define SDRAM_OFFSET(x) 0x2##x
 #define CONFIG_SYS_SDRAM_BASE		0x20000000
 #define CONFIG_SYS_LOAD_ADDR		0x22000000 /* default load address */
-/* Note SPL_STACK_R_ADDR is set through Kconfig, we include it here 
+/* Note SPL_STACK_R_ADDR is set through Kconfig, we include it here
  * since it needs to fit in with the other values. By also #defining it
  * we get warnings if the Kconfig value mismatches. */
 #define CONFIG_SPL_STACK_R_ADDR		0x2fe00000
@@ -72,7 +72,7 @@
 #define CONFIG_SYS_SDRAM_BASE		0x40000000
 #define CONFIG_SYS_LOAD_ADDR		0x42000000 /* default load address */
 /* V3s do not have enough memory to place code at 0x4a000000 */
-/* Note SPL_STACK_R_ADDR is set through Kconfig, we include it here 
+/* Note SPL_STACK_R_ADDR is set through Kconfig, we include it here
  * since it needs to fit in with the other values. By also #defining it
  * we get warnings if the Kconfig value mismatches. */
 #define CONFIG_SPL_STACK_R_ADDR		0x4fe00000
@@ -246,6 +246,8 @@ extern int soft_i2c_gpio_scl;
 #define OF_STDOUT_PATH		"/soc@01c00000/serial@01c28400:115200"
 #elif CONFIG_CONS_INDEX == 3 && defined(CONFIG_MACH_SUN8I)
 #define OF_STDOUT_PATH		"/soc@01c00000/serial@01c28800:115200"
+#elif CONFIG_CONS_INDEX == 4 && defined(CONFIG_MACH_SUN50I_H6)
+#define OF_STDOUT_PATH		"/soc@01c00000/serial@01c28c00:115200"
 #elif CONFIG_CONS_INDEX == 5 && defined(CONFIG_MACH_SUN8I)
 #define OF_STDOUT_PATH		"/soc@01c00000/serial@01f02800:115200"
 #else
