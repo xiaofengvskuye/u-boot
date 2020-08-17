@@ -7,13 +7,14 @@ CONFIG_MACH_SUNIV=y
 CONFIG_DRAM_CLK=156
 CONFIG_DRAM_ZQ=0
 CONFIG_SYS_CLK_FREQ=720000000
-CONFIG_VIDEO_LCD_MODE="x:480,y:272,depth:16,pclk_khz:10000,le:42,ri:8,up:11,lo:4,hs:1,vs:1,sync:3,vmode:0"
+CONFIG_VIDEO_LCD_MODE="x:1024,y:600,depth:16,pclk_khz:45000,le:88,ri:176,up:25,lo:20,hs:5,vs:5,sync:3,vmode:0"
+#CONFIG_VIDEO_LCD_MODE="x:480,y:272,depth:16,pclk_khz:10000,le:42,ri:8,up:11,lo:4,hs:1,vs:1,sync:3,vmode:0"
 CONFIG_DEFAULT_DEVICE_TREE="suniv-f1c100s-lotlab-act-monitor"
 CONFIG_CMD_BOOTMENU=y
 CONFIG_CMD_MEMINFO=y
 CONFIG_BOOTDELAY=0
 CONFIG_USE_BOOTARGS=y
-CONFIG_BOOTARGS="console=ttyS1,115200  panic=5 vt.global_cursor_default=0  rootwait root=/dev/mmcblk0p2 earlyprintk rw  init=/linuxrc"
+CONFIG_BOOTARGS="console=ttyS0,115200  panic=5 vt.global_cursor_default=0  rootwait root=/dev/mmcblk0p2 earlyprintk rw  init=/linuxrc"
 CONFIG_USE_BOOTCOMMAND=y
 CONFIG_BOOTCOMMAND="load mmc 0:1 0x80008000 zImage; load mmc 0:1 0x80c00000 suniv-f1c200s.dtb; bootz 0x80008000 - 0x80c00000"
 
@@ -60,5 +61,5 @@ CONFIG_FASTBOOT_CMD_OEM_FORMAT=y
 #CONFIG_FASTBOOT_FLASH_MMC=y
 #CONFIG_FASTBOOT_FLASH_MMC_DEV=1
 #CONFIG_FASTBOOT_CMD_OEM_FORMAT=y
-CONFIG_CONS_INDEX=2
+CONFIG_CONS_INDEX=1
 # CONFIG_NET is not set
