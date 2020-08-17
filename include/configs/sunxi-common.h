@@ -277,7 +277,8 @@ extern int soft_i2c_gpio_scl;
  * The amount of RAM to keep free at the top of RAM when relocating u-boot,
  * to use as framebuffer. This must be a multiple of 4096.
  */
-#define CONFIG_SUNXI_MAX_FB_SIZE (2 << 20)
+//#define CONFIG_SUNXI_MAX_FB_SIZE (2 << 20)
+#define CONFIG_SUNXI_MAX_FB_SIZE (0x280000)
 
 #define CONFIG_VIDEO_LOGO
 #define CONFIG_VIDEO_STD_TIMINGS
@@ -490,12 +491,18 @@ extern int soft_i2c_gpio_scl;
 #else
 #define SUNXI_MTDPARTS_DEFAULT
 #endif
-
+#if defined(CONFIG_MACH_SUNIV)
 #define PARTS_DEFAULT \
 	"name=loader,start=8k,size=1024k;" \
 	"name=esp,size=16M,bootable,uuid=${uuid_gpt_esp};" \
 	"name=system,size=-,uuid=${uuid_gpt_system};"
-
+#else
+#define PARTS_DEFAULT \
+	"name=loader1,start=8k,size=32k,uuid=${uuid_gpt_loader1};" \
+	"name=loader2,size=984k,uuid=${uuid_gpt_loader2};" \
+	"name=esp,size=128M,bootable,uuid=${uuid_gpt_esp};" \
+	"name=system,size=-,uuid=${uuid_gpt_system};"
+#endif
 #define UUID_GPT_ESP "c12a7328-f81f-11d2-ba4b-00a0c93ec93b"
 
 #ifdef CONFIG_ARM64
