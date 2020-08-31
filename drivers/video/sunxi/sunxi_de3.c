@@ -15,6 +15,8 @@
 #include <fdtdec.h>
 #include <fdt_support.h>
 #include <video.h>
+#include <log.h>
+#include <linux/delay.h>
 #include <asm/global_data.h>
 #include <asm/io.h>
 #include <asm/arch/clock.h>
