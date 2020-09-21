@@ -107,6 +107,75 @@ static const struct mtd_ooblayout_ops gd5fxgq4xexxg_ooblayout = {
 	.rfree = gd5fxgq4xexxg_ooblayout_free,
 };
 
+static int gd5fxgq4xa_ooblayout_ecc(struct mtd_info *mtd, int section,
+				  struct mtd_oob_region *region)
+{
+	if (section > 3)
+		return -ERANGE;
+
+	region->offset = (16 * section) + 8;
+	region->length = 8;
+
+	return 0;
+}
+
+static int gd5fxgq4xa_ooblayout_free(struct mtd_info *mtd, int section,
+				   struct mtd_oob_region *region)
+{
+	if (section > 3)
+		return -ERANGE;
+
+	if (section) {
+		region->offset = 16 * section;
+		region->length = 8;
+	} else {
+		/* section 0 has one byte reserved for bad block mark */
+		region->offset = 1;
+		region->length = 7;
+	}
+	return 0;
+}
+
+static int gd5fxgq4xa_ecc_get_status(struct spinand_device *spinand,
+					 u8 status)
+{
+	switch (status & STATUS_ECC_MASK) {
+	case STATUS_ECC_NO_BITFLIPS:
+		return 0;
+
+	case GD5FXGQ4XA_STATUS_ECC_1_7_BITFLIPS:
+		/* 1-7 bits are flipped. return the maximum. */
+		return 7;
+
+	case GD5FXGQ4XA_STATUS_ECC_8_BITFLIPS:
+		return 8;
+
+	case STATUS_ECC_UNCOR_ERROR:
+		return -EBADMSG;
+
+	default:
+		break;
+	}
+
+	return -EINVAL;
+}
+
+static const struct mtd_ooblayout_ops gd5fxgq4xa_ooblayout = {
+	.ecc = gd5fxgq4xa_ooblayout_ecc,
+	.rfree = gd5fxgq4xa_ooblayout_free,
+};
+
+ static const struct spinand_info gigadevice_spinand_table[] = {
+	SPINAND_INFO("GD5F1GQ4UAxxG", 0xf1,
+		     NAND_MEMORG(1, 2048, 64, 64, 1024, 1, 1, 1),
+		     NAND_ECCREQ(8, 512),
+		     SPINAND_INFO_OP_VARIANTS(&read_cache_variants,
+					      &write_cache_variants,
+					      &update_cache_variants),
+		     0,
+		     SPINAND_ECCINFO(&gd5fxgq4xa_ooblayout,
+				     gd5fxgq4xa_ecc_get_status)),
+
 static const struct spinand_info gigadevice_spinand_table[] = {
 	SPINAND_INFO("GD5F1GQ4UExxG", 0xd1,
 		     NAND_MEMORG(1, 2048, 128, 64, 1024, 1, 1, 1),

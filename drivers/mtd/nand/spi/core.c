@@ -663,6 +663,8 @@ static bool spinand_isbad(struct nand_device *nand, const struct nand_pos *pos)
 		.mode = MTD_OPS_RAW,
 	};
 	int ret;
+	struct mtd_oob_region region;
+	int i;
 
 	memset(spinand->oobbuf, 0, 2);
 	ret = spinand_select_target(spinand, pos->target);
@@ -673,8 +675,12 @@ static bool spinand_isbad(struct nand_device *nand, const struct nand_pos *pos)
 	if (ret)
 		return ret;
 
-	if (spinand->oobbuf[0] != 0xff || spinand->oobbuf[1] != 0xff)
-		return true;
+	spinand->eccinfo.ooblayout->rfree(spinand->base.mtd, 0, &region);
+
+	for(i = 0 ; i < req.ooblen && i < region.offset; i++){
+		if (spinand->oobbuf[i] != 0xff)
+			return true;
+	}
 
 	return false;
 }
@@ -709,6 +715,7 @@ static int spinand_markbad(struct nand_device *nand, const struct nand_pos *pos)
 		.oobbuf.out = spinand->oobbuf,
 	};
 	int ret;
+	struct mtd_oob_region region;
 
 	/* Erase block before marking it bad. */
 	ret = spinand_select_target(spinand, pos->target);
@@ -724,6 +731,10 @@ static int spinand_markbad(struct nand_device *nand, const struct nand_pos *pos)
 		return ret;
 
 	memset(spinand->oobbuf, 0, 2);
+
+	spinand->eccinfo.ooblayout->rfree(spinand->base.mtd, 0, &region);
+	req.ooblen = region.offset < req.ooblen ? region.offset : req.ooblen;
+
 	return spinand_write_page(spinand, &req);
 }
 
