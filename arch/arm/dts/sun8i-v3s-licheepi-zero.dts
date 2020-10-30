@@ -56,6 +56,44 @@
 		stdout-path = "serial0:115200n8";
 	};
 
+	 backlight: backlight {
+        compatible = "pwm-backlight";
+        pwms = <&pwm 0 50000 0>;
+        brightness-levels = <0 2 4 8 16 32 64 128 255>;
+        default-brightness-level = <8>;
+    };
+
+    panel-rgb@0 {
+        compatible = "simple-panel";
+        backlight = <&backlight>;
+
+        display-timings {
+            timing@0 {
+                clock-frequency = <50000000>;
+                hactive = <480>;
+                vactive = <272>;
+                hfront-porch = <2>;
+                hback-porch = <2>;
+                hsync-len = <41>;
+                vfront-porch = <2>;
+                vback-porch = <2>;
+                vsync-len = <10>;
+                hsync-active = <0>;
+                vsync-active = <0>;
+                de-active = <0>;
+                pixelclk-active = <1>;
+            };
+        };
+    };
+};
+
+
+&emac {
+    phy-handle = <&int_mii_phy>;
+    phy-mode = "mii";
+    allwinner,use-internal-phy;
+    status = "okay";
+
 	leds {
 		compatible = "gpio-leds";
 
@@ -84,6 +122,10 @@
 	status = "okay";
 };
 
+&spi0 {
+    status = "disabled";
+};
+
 &uart0 {
 	pinctrl-0 = <&uart0_pb_pins>;
 	pinctrl-names = "default";
@@ -93,6 +135,17 @@
 &usb_otg {
 	dr_mode = "otg";
 	status = "okay";
+};
+&ehci0 {
+    status = "okay";
+};
+
+&ohci0 {
+    status = "okay";
+};
+
+&pwm {
+    status = "okay";
 };
 
 &usbphy {
