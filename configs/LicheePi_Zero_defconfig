@@ -7,6 +7,11 @@ CONFIG_DEFAULT_DEVICE_TREE="sun8i-v3s-licheepi-zero"
 CONFIG_CMD_BOOTMENU=y
 CONFIG_CMD_MEMINFO=y
 CONFIG_BOOTDELAY=0
+CONFIG_VIDEO_LCD_MODE="x:1024,y:600,depth:16,pclk_khz:45000,le:88,ri:176,up:25,lo:20,hs:5,vs:5,sync:3,vmode:0"
+CONFIG_USE_BOOTARGS=y
+CONFIG_BOOTARGS="console=ttyS0,115200  panic=5 vt.global_cursor_default=0  rootwait root=/dev/mmcblk0p2 earlyprintk rw  init=/linuxrc"
+CONFIG_USE_BOOTCOMMAND=y
+CONFIG_BOOTCOMMAND="load mmc 0:1 0x80008000 zImage; load mmc 0:1 0x80c00000 suniv-f1c200s.dtb; bootz 0x80008000 - 0x80c00000"
 
 CONFIG_NETDEVICES=y
 CONFIG_SUN8I_EMAC=y
@@ -17,7 +22,6 @@ CONFIG_SUNXI_SPI=y
 
 CONFIG_MMC=y
 CONFIG_MMC_SUNXI_SLOT_EXTRA=2
-CONFIG_MMC0_CD_PIN="PF6"
 
 CONFIG_CMD_BMP=y
 CONFIG_VIDEO_BPP8=y
