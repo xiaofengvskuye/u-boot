@@ -262,6 +262,7 @@ config MACH_SUN8I_V3S
 	select SUNXI_DRAM_DW
 	select SUNXI_DRAM_DW_16BIT
 	select SUPPORT_SPL
+	select SUNXI_DE2
 
 config MACH_SUN8I_S3
 	bool "sun8i (Allwinner S3)"
