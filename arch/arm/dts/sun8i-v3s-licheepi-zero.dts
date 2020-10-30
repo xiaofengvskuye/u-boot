@@ -134,9 +134,12 @@
 
 &usb_otg {
 	dr_mode = "otg";
+	phys = <&usbphy>;
+    extcon = <&usbphy>;
 	status = "okay";
 };
 &ehci0 {
+
     status = "okay";
 };
 
