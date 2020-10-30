@@ -263,6 +263,7 @@ config MACH_SUN8I_V3S
 	select SUNXI_DRAM_DW_16BIT
 	select SUPPORT_SPL
 	select SUNXI_DE2
+	select ARMV7_BOOT_SEC_DEFAULT if OLD_SUNXI_KERNEL_COMPAT
 
 config MACH_SUN8I_S3
 	bool "sun8i (Allwinner S3)"
@@ -275,6 +276,7 @@ config MACH_SUN8I_S3
 	select SUNXI_DRAM_DW_16BIT
 	select SUPPORT_SPL
 	select SUNXI_DE2
+	select ARMV7_BOOT_SEC_DEFAULT if OLD_SUNXI_KERNEL_COMPAT
 
 config MACH_SUN9I
 	bool "sun9i (Allwinner A80)"
