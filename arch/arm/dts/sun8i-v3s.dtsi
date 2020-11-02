@@ -449,6 +449,16 @@
 				bias-pull-up;
 			};
 
+			pwm0_pin: pwm0-pin {
+				pins = "PB4";
+				function = "pwm";
+			};
+
+			pwm1_pin: pwm1-pin {
+				pins = "PB5";
+				function = "pwm";
+			};
+
 			spi0_pins: spi0-pins {
 				pins = "PC0", "PC1", "PC2", "PC3";
 				function = "spi0";
