@@ -291,6 +291,16 @@
 				drive-strength = <30>;
 				bias-pull-up;
 			};
+
+			pwm0_pin: pwm0-pin {
+				pins = "PB4";
+				function = "pwm";
+			};
+
+			pwm1_pin: pwm1-pin {
+				pins = "PB5";
+				function = "pwm";
+			};
 		};
 
 		timer@01c20c00 {

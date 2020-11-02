@@ -62,7 +62,7 @@
 #define SDRAM_OFFSET(x) 0x2##x
 #define CONFIG_SYS_SDRAM_BASE		0x20000000
 #define CONFIG_SYS_LOAD_ADDR		0x22000000 /* default load address */
-/* Note SPL_STACK_R_ADDR is set through Kconfig, we include it here 
+/* Note SPL_STACK_R_ADDR is set through Kconfig, we include it here
  * since it needs to fit in with the other values. By also #defining it
  * we get warnings if the Kconfig value mismatches. */
 #define CONFIG_SPL_STACK_R_ADDR		0x2fe00000
@@ -72,7 +72,7 @@
 #define CONFIG_SYS_SDRAM_BASE		0x40000000
 #define CONFIG_SYS_LOAD_ADDR		0x42000000 /* default load address */
 /* V3s do not have enough memory to place code at 0x4a000000 */
-/* Note SPL_STACK_R_ADDR is set through Kconfig, we include it here 
+/* Note SPL_STACK_R_ADDR is set through Kconfig, we include it here
  * since it needs to fit in with the other values. By also #defining it
  * we get warnings if the Kconfig value mismatches. */
 #define CONFIG_SPL_STACK_R_ADDR		0x4fe00000
@@ -425,7 +425,7 @@ extern int soft_i2c_gpio_scl;
 #ifdef CONFIG_CMD_FASTBOOT
 #define FASTBOOT_SETTINGS \
 	"boot_targets=fel mmc_auto usb0 fastboot\0" \
-	"bootcmd_fastboot=fastboot usb 0\0" 
+	"bootcmd_fastboot=fastboot usb 0\0"
 #else
 #define FASTBOOT_SETTINGS
 #endif
@@ -438,11 +438,25 @@ extern int soft_i2c_gpio_scl;
 	"stdin=serial\0"
 #endif
 
+#ifdef CONFIG_DM_VIDEO
+#define CONFIG_VIDEO_BMP_RLE8
+#define CONFIG_BMP_16BPP
+#define CONFIG_BMP_24BPP
+#define CONFIG_BMP_32BPP
+// #define CONFIG_SPLASH_SCREEN
+#define CONFIG_SPLASH_SOURCE
+#define SPLASHIMAGE_ENV_SETTINGS "splashimage=" __stringify(SDRAM_OFFSET(2000000)) "\0"
+#define CONFIG_ENV_DYNAMIC_DEFAULT
+#else
+#define SPLASHIMAGE_ENV_SETTINGS
+#endif
+
 #ifdef CONFIG_VIDEO
 #define CONSOLE_STDOUT_SETTINGS \
 	"stdout=serial,vga\0" \
 	"stderr=serial,vga\0"
-#elif CONFIG_DM_VIDEO
+#else
+#if CONFIG_DM_VIDEO && !defined(CONFIG_SPLASH_SCREEN)
 #define CONSOLE_STDOUT_SETTINGS \
 	"stdout=serial,vidconsole\0" \
 	"stderr=serial,vidconsole\0"
@@ -450,6 +464,7 @@ extern int soft_i2c_gpio_scl;
 #define CONSOLE_STDOUT_SETTINGS \
 	"stdout=serial\0" \
 	"stderr=serial\0"
+#endif
 #endif
 
 #ifdef CONFIG_MTDIDS_DEFAULT
@@ -495,19 +510,6 @@ extern int soft_i2c_gpio_scl;
 #define FDTFILE "allwinner/" CONFIG_DEFAULT_DEVICE_TREE ".dtb"
 #else
 #define FDTFILE CONFIG_DEFAULT_DEVICE_TREE ".dtb"
-#endif
-
-#ifdef CONFIG_DM_VIDEO
-#define CONFIG_VIDEO_BMP_RLE8
-#define CONFIG_BMP_16BPP
-#define CONFIG_BMP_24BPP
-#define CONFIG_BMP_32BPP
-#define CONFIG_SPLASH_SCREEN
-#define CONFIG_SPLASH_SOURCE
-#define SPLASHIMAGE_ENV_SETTINGS "splashimage=" __stringify(SDRAM_OFFSET(2000000)) "\0"
-#define CONFIG_ENV_DYNAMIC_DEFAULT
-#else
-#define SPLASHIMAGE_ENV_SETTINGS
 #endif
 
 #define CONFIG_EXTRA_ENV_SETTINGS \
