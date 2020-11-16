@@ -443,6 +443,7 @@ extern int soft_i2c_gpio_scl;
 #define CONFIG_BMP_16BPP
 #define CONFIG_BMP_24BPP
 #define CONFIG_BMP_32BPP
+#define CONFIG_HIDE_LOGO_VERSION
 // #define CONFIG_SPLASH_SCREEN
 #define CONFIG_SPLASH_SOURCE
 #define SPLASHIMAGE_ENV_SETTINGS "splashimage=" __stringify(SDRAM_OFFSET(2000000)) "\0"
