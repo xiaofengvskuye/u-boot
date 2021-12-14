@@ -29,7 +29,7 @@ enum {
 	/* Maximum LCD size we support */
 	LCD_MAX_WIDTH		= 1024,
 	LCD_MAX_HEIGHT		= 768,
-	LCD_MAX_LOG2_BPP	= VIDEO_BPP32,
+	LCD_MAX_LOG2_BPP	= VIDEO_BPP16,
 };
 #else
 enum {
@@ -256,7 +256,7 @@ static int sunxi_de2_probe(struct udevice *dev)
 
 		mux = 0;
 
-		ret = sunxi_de2_init(dev, plat->base, VIDEO_BPP32, disp, mux,
+		ret = sunxi_de2_init(dev, plat->base, VIDEO_BPP16, disp, mux,
 				     false);
 		if (!ret) {
 			video_set_flush_dcache(dev, 1);
@@ -275,7 +275,7 @@ static int sunxi_de2_probe(struct udevice *dev)
 		else
 			mux = 1;
 
-		ret = sunxi_de2_init(dev, plat->base, VIDEO_BPP32, disp, mux,
+		ret = sunxi_de2_init(dev, plat->base, VIDEO_BPP16, disp, mux,
 				     false);
 		if (!ret) {
 			video_set_flush_dcache(dev, 1);
@@ -393,7 +393,7 @@ int sunxi_simplefb_setup(void *blob)
 	ret = fdt_setup_simplefb_node(blob, offset, de2_plat->base,
 			de2_priv->xsize, de2_priv->ysize,
 			VNBYTES(de2_priv->bpix) * de2_priv->xsize,
-			"x8r8g8b8");
+			"r5g6b5");
 	if (ret)
 		eprintf("Cannot setup simplefb: Error setting properties\n");
 
