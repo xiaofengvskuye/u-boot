@@ -186,7 +186,7 @@
 #define FDTOVERLAY_ADDR_R __stringify(SDRAM_OFFSET(FE00000))
 #define RAMDISK_ADDR_R    __stringify(SDRAM_OFFSET(FF00000))
 
-
+#else
 #if defined(CONFIG_MACH_SUN8I_V3S) || defined(CONFIG_MACH_SUN8I_S3)
 /*
  * 64M RAM minus 2MB heap + 16MB for u-boot, stack, fb, etc.
