@@ -397,7 +397,7 @@ extern int soft_i2c_gpio_scl;
 #ifdef CONFIG_CMD_FASTBOOT
 #define FASTBOOT_SETTINGS \
 	"boot_targets=fel mmc_auto usb0 fastboot\0" \
-	"bootcmd_fastboot=fastboot usb 0\0" 
+	"bootcmd_fastboot=fastboot usb 0\0"
 #else
 #define FASTBOOT_SETTINGS
 #endif
@@ -471,7 +471,6 @@ extern int soft_i2c_gpio_scl;
 #define CONFIG_BMP_24BPP
 #define CONFIG_BMP_32BPP
 #define CONFIG_HIDE_LOGO_VERSION
-#define CONFIG_SPLASH_SCREEN
 #define CONFIG_SPLASH_SOURCE
 #define SPLASHIMAGE_ENV_SETTINGS "splashimage=" __stringify(SDRAM_OFFSET(2000000)) "\0"
 #define CONFIG_ENV_DYNAMIC_DEFAULT
