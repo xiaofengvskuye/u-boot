@@ -86,6 +86,7 @@
 #define SUN8I_IOMUX_R40		5
 #define SUN8I_IOMUX_H6		5
 #define SUN8I_IOMUX_H616	2
+#define SUN8I_IOMUX_V3S		2
 #define SUN8I_IOMUX		4
 
 /* H3/A64 EMAC Register's offset */
@@ -567,6 +568,8 @@ static int parse_phy_pins(struct udevice *dev)
 		iomux = SUN8I_IOMUX;
 	else if (IS_ENABLED(CONFIG_MACH_SUN50I))
 		iomux = SUN8I_IOMUX;
+	else if (IS_ENABLED(CONFIG_MACH_SUN8I_V3S))
+		iomux = SUN8I_IOMUX_V3S;
 	else
 		BUILD_BUG_ON_MSG(1, "missing pinmux value for Ethernet pins");
 
