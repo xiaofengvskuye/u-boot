@@ -1041,9 +1041,6 @@ config SPL_SPI_SUNXI
 config SPL_SPINAND_SUNXI
 	bool "Support for SPI NAND-Flash on Allwinner SoCs in SPL"
 	depends on MACH_SUN4I || MACH_SUN5I || MACH_SUN7I || MACH_SUNXI_H3_H5 || MACH_SUN50I || MACH_SUN8I_V3S
-	select SPL_SPINAND_SUNXI_SPL_SIZE
-	select SPL_SPINAND_SUNXI_UBOOT_PADDING
-	select SPL_SPINAND_SUNXI_PAGESIZE
 	help
 	  Enable support for SPI-NAND Flash. This option allows SPL to read from
 	  sunxi SPI-NAND Flash. It needs further configuration to calculate all offsets correctly.
