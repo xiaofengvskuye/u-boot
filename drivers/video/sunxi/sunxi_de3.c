@@ -157,7 +157,7 @@ static int sunxi_de3_init(struct udevice *dev, ulong fbbase,
 	struct display_plat *disp_uc_plat;
 	int ret;
 
-	disp_uc_plat = dev_get_uclass_platdata(disp);
+	disp_uc_plat = dev_get_uclass_plat(disp);
 	debug("Using device '%s', disp_uc_priv=%p\n", disp->name, disp_uc_plat);
 	if (display_in_use(disp)) {
 		debug("   - device in use\n");
@@ -165,13 +165,6 @@ static int sunxi_de3_init(struct udevice *dev, ulong fbbase,
 	}
 
 	disp_uc_plat->source_id = mux;
-
-	ret = device_probe(disp);
-	if (ret) {
-		debug("%s: device '%s' display won't probe (ret=%d)\n",
-		      __func__, dev->name, ret);
-		return ret;
-	}
 
 	ret = display_read_timing(disp, &timing);
 	if (ret) {
@@ -198,7 +191,7 @@ static int sunxi_de3_init(struct udevice *dev, ulong fbbase,
 
 static int sunxi_de3_probe(struct udevice *dev)
 {
-	struct video_uc_platdata *plat = dev_get_uclass_platdata(dev);
+	struct video_uc_plat *plat = dev_get_uclass_plat(dev);
 	struct udevice *disp;
 	int ret;
 
@@ -206,8 +199,8 @@ static int sunxi_de3_probe(struct udevice *dev)
 	if (!(gd->flags & GD_FLG_RELOC))
 		return 0;
 
-	ret = uclass_find_device_by_name(UCLASS_DISPLAY,
-					 "sun50i_dw_hdmi", &disp);
+	ret = uclass_get_device_by_driver(UCLASS_DISPLAY,
+					  DM_DRIVER_GET(sunxi_dw_hdmi), &disp);
 	if (ret) {
 		debug("%s: hdmi display not found (ret=%d)\n", __func__, ret);
 		return ret;
@@ -224,7 +217,7 @@ static int sunxi_de3_probe(struct udevice *dev)
 
 static int sunxi_de3_bind(struct udevice *dev)
 {
-	struct video_uc_platdata *plat = dev_get_uclass_platdata(dev);
+	struct video_uc_plat *plat = dev_get_uclass_plat(dev);
 
 	plat->size = LCD_MAX_WIDTH * LCD_MAX_HEIGHT *
 		(1 << LCD_MAX_LOG2_BPP) / 8;
@@ -244,7 +237,7 @@ U_BOOT_DRIVER(sunxi_de3) = {
 	.flags	= DM_FLAG_PRE_RELOC,
 };
 
-U_BOOT_DEVICE(sunxi_de3) = {
+U_BOOT_DRVINFO(sunxi_de3) = {
 	.name = "sunxi_de3"
 };
 
@@ -256,7 +249,7 @@ int sunxi_simplefb_setup(void *blob)
 {
 	struct udevice *de2, *hdmi;
 	struct video_priv *de2_priv;
-	struct video_uc_platdata *de2_plat;
+	struct video_uc_plat *de2_plat;
 	int offset, ret;
 	u64 start, size;
 	const char *pipeline = NULL;
@@ -264,8 +257,8 @@ int sunxi_simplefb_setup(void *blob)
 	debug("Setting up simplefb\n");
 
 	/* Skip simplefb setting if DE2 / HDMI is not present */
-	ret = uclass_find_device_by_name(UCLASS_VIDEO,
-					 "sunxi_de3", &de2);
+	ret = uclass_get_device_by_driver(UCLASS_VIDEO,
+					  DM_DRIVER_GET(sunxi_de3), &de2);
 	if (ret) {
 		debug("DE3 not present\n");
 		return 0;
@@ -274,8 +267,8 @@ int sunxi_simplefb_setup(void *blob)
 		return 0;
 	}
 
-	ret = uclass_find_device_by_name(UCLASS_DISPLAY,
-					 "sun50i_dw_hdmi", &hdmi);
+	ret = uclass_get_device_by_driver(UCLASS_VIDEO,
+					  DM_DRIVER_GET(sunxi_dw_hdmi), &hdmi);
 	if (ret) {
 		debug("HDMI not present\n");
 	} else if (device_active(hdmi)) {
@@ -290,7 +283,7 @@ int sunxi_simplefb_setup(void *blob)
 	}
 
 	de2_priv = dev_get_uclass_priv(de2);
-	de2_plat = dev_get_uclass_platdata(de2);
+	de2_plat = dev_get_uclass_plat(de2);
 
 	offset = sunxi_simplefb_fdt_match(blob, pipeline);
 	if (offset < 0) {
