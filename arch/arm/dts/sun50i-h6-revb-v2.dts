@@ -13,12 +13,14 @@
 	compatible = "rervision,REVB-H6-V2", "allwinner,sun50i-h6";
 
 	aliases {
-		serial0 = &uart3;
+		serial0 = &uart0;
 		serial1 = &uart1;
+		serial3 = &uart3;
+		ethernet0 = &emac;
 	};
 
 	chosen {
-		stdout-path = "serial0:115200n8";
+		stdout-path = "serial3:115200n8";
 	};
 
 	connector {
@@ -93,6 +95,24 @@
 	};
 };
 
+&emac {
+	pinctrl-names = "default";
+	pinctrl-0 = <&ext_rmii_pins>;
+	phy-mode = "rmii";
+	phy-handle = <&ext_rmii_phy>;
+	phy-supply = <&reg_aldo2>;
+	allwinner,rx-delay-ps = <200>;
+	allwinner,tx-delay-ps = <200>;
+	status = "okay";
+};
+
+&mdio {
+	ext_rmii_phy: ethernet-phy@1 {
+		compatible = "ethernet-phy-ieee802.3-c22";
+		reg = <1>;
+	};
+};
+
 &cpu0 {
 	cpu-supply = <&reg_dcdca>;
 };
@@ -102,10 +122,6 @@
 };
 
 &dwc3 {
-	status = "okay";
-};
-
-&ehci0 {
 	status = "okay";
 };
 
@@ -128,12 +144,19 @@
 	};
 };
 
+&ehci0 {
+	status = "okay";
+};
+
 &mmc0 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&mmc0_pins>;
 	vmmc-supply = <&reg_cldo1>;
-	cd-gpios = <&pio 5 6 GPIO_ACTIVE_LOW>; /* PF6 */
+	cd-gpios = <&pio 5 6 GPIO_ACTIVE_LOW>;
 	bus-width = <4>;
 	status = "okay";
 };
+
 
 &mmc1 {
 	vmmc-supply = <&reg_vcc33_wifi>;
