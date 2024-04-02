@@ -1563,6 +1563,9 @@ static ulong rk3399_pmuclk_get_rate(struct clk *clk)
 	case SCLK_I2C8_PMU:
 		rate = rk3399_i2c_get_pmuclk(priv->pmucru, clk->id);
 		break;
+    case SCLK_UART4_PMU:
+		return 24000000;
+        break;
 	default:
 		return -ENOENT;
 	}
